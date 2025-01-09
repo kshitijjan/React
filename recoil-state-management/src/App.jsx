@@ -1,26 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { countAtom } from './store/atoms/count'
+import { countAtom, evenSelector } from './store/atoms/count'
 
 function App() {
 
   return <div>
-    <CountRenderer />
-  </div>
-}
-
-const CountRenderer = () => {
-//All the components which are using Recoil must be wrapped inside RecoilRoot same as contextAPI (<Component.Provider value={count})
-  return <div>
-    <RecoilRoot>  
-      <Count/>
-      <IncreaseButtons/>
-      <DecreaseButtons/>
-    </RecoilRoot>
+    <Count />
   </div>
 }
 
 const Count = () => {
+//All the components which are using Recoil must be wrapped inside <RecoilRoot> same as contextAPI (<Component.Provider value={count})
+  return <div>
+    <RecoilRoot>  
+      <CountRenderer/>
+      <Buttons/>
+      <CheckEven/>
+    </RecoilRoot>
+  </div>
+}
+//Count component will not re-render whenever count increases or decreases which was previously happened with contextAPI
+//So we solved a problem of re-rendering 
+
+const CountRenderer = () => {
   const count = useRecoilValue(countAtom);
   return <div>
     {count}
@@ -34,21 +36,35 @@ const Count = () => {
 // useRecoilValue  -> count
 // useRecoilState  -> setCount
 // useSetRecoilState -> [count, setCount]
-const IncreaseButtons = () => {
+
+/* const Buttons = () => {
   
   const [count, setCount] = useRecoilState(countAtom);   
   return <div>
 
     <button onClick={ () => {setCount(count + 1);}}>Increase</button>
+    <button onClick={ () => {setCount(count-1)}}>Decrease</button>
    
+  </div>
+} */
+//The above Button Component is re-rendering whenever increase or decrease button is clicked because we're using count variable from countAtom
+//To fix this, use below component
+
+const Buttons = () => {
+  const setCount = useSetRecoilState(countAtom); //This creates a fresh count variable and reduces re-rendering
+
+  return <div>
+    <button onClick={ () => {setCount(count => count+1) }}>Increase</button>
+    <button onClick={ () => {setCount(count => count-1) }}>Decrease</button>
   </div>
 }
 
-const DecreaseButtons = () => {
 
-  const [count, setCount] = useRecoilState(countAtom)
+const CheckEven = () => {
+
+  const isEven = useRecoilValue(evenSelector)
   return <div>
-     <button onClick={ () => {setCount(count-1)}}>Decrease</button>
+    {isEven == 0 ? 'It is Even' : 'It is odd' }
   </div>
 }
 
