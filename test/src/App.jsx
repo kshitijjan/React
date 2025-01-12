@@ -1,46 +1,25 @@
-import { useContext, useEffect, useState } from 'react'
-
-import { CountContext,SetCountContext } from './context';
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil"
+import { networkAtom } from "./atoms"
 
 function App() {
 
-  const [count, setCount] = useState(0);
-
   return <div>
-    <CountContext.Provider value={count}>
-      <SetCountContext.Provider value={setCount}>
-      <Count/>
-      </SetCountContext.Provider>
-    </CountContext.Provider>
-    
+    <RecoilRoot>
+      <NavBar/>
+    </RecoilRoot>
   </div>
 }
 
-const Count = () => {
-  return <div>
-    <CountRenderer />
-    <Buttons/>
-  </div>
-}
+const NavBar = () => {
 
-const CountRenderer = () => {
-  const count = useContext(CountContext);
+  const navBarNetwork = useRecoilValue(networkAtom)
   return <div>
-    {count}
-  </div>
-}
-const Buttons = () => {
-  const count = useContext(CountContext); 
-  const setCount = useContext(SetCountContext);
-  return <div>
-    <button onClick={ () => {
-      setCount(count+1);
-    }}>Increase</button>
-    <button onClick={ () => {
-      setCount(count-1);
-    }}>
-      Decrease Count
-    </button>
+    <button>Home</button>
+    <button>My network ({navBarNetwork.network})</button>
+    <button>Jobs ({navBarNetwork.jobs})</button>
+    <button>Messages ({navBarNetwork.messaging})</button>
+    <button>Notifications ({navBarNetwork.notifications})</button>
+    <button>Me</button>
   </div>
 }
 

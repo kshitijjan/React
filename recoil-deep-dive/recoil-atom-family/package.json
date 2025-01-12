@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "recoil-atom-family",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.7.9",
-    "context": "^3.0.33",
+    "express": "^4.21.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recoil": "^0.7.7"
