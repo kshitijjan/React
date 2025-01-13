@@ -1,26 +1,14 @@
-import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil"
-import { networkAtom } from "./atoms"
+import { useState } from "react"
+
 
 function App() {
-
-  return <div>
-    <RecoilRoot>
-      <NavBar/>
-    </RecoilRoot>
+  const [color, setColor] = useState('Orange')
+  
+  return <div style={{backgroundColor: color}}>
+    <button onClick={ () => {setColor('Red')}}>Red</button>
+    <button onClick={ () => {setColor('Blue')}}>Blue</button>
+    <button onClick={ () => {setColor('Yellow')}}>Yellow</button>
+    <button onClick={ () => {setColor('Brown')}}>Brown</button>
   </div>
 }
-
-const NavBar = () => {
-
-  const navBarNetwork = useRecoilValue(networkAtom)
-  return <div>
-    <button>Home</button>
-    <button>My network ({navBarNetwork.network})</button>
-    <button>Jobs ({navBarNetwork.jobs})</button>
-    <button>Messages ({navBarNetwork.messaging})</button>
-    <button>Notifications ({navBarNetwork.notifications})</button>
-    <button>Me</button>
-  </div>
-}
-
 export default App

@@ -1,5 +1,5 @@
 
-import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import './App.css'
 import { todoAtom } from './atoms'
 
@@ -10,19 +10,35 @@ function App() {
     <RecoilRoot>
       <RenderTodo id={1}/>
       <br/>
-      <RenderTodo id={2}/>
+      <RenderTodo id={2}/> 
     </RecoilRoot>
   </div>
 }
 
 const RenderTodo = ({id}) => {
-  const todo = useRecoilValue(todoAtom(id))
+  const todo = useRecoilValueLoadable(todoAtom(id))
+  // Loadable contains 2 things
+  // 1. state -> loading, hasValue, hasError
+  // 2. contents 
 
-  return <div>
-    Title: {todo.title}
+  if(todo.state === "loading"){
+    return <div>
+      loading...
+    </div>
+  }
+  else if(todo.state === "hasValue"){
+    return <div>
+    Title: {todo.contents.title}
     <br></br>
-    Description: {todo.description}
+    Description: {todo.contents.description}
   </div>
+  }
+  else if(todo.state === "hasError"){
+    return <div>
+      An error occured
+    </div>
+  }
+  
 }
 
 export default App
